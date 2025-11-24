@@ -1,0 +1,14 @@
+apiVersion: 1
+
+providers:
+  # <string> an unique provider name. Required
+  - name: 'service-graph'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      # <string, required> path to dashboard files on disk. Required when using the 'file' type
+      path: /provisioning/service-graph.json
+      # <bool> use folder names from filesystem to create folders in Grafana
+      foldersFromFilesStructure: false
