@@ -42,6 +42,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.7.0
         with:
@@ -56,7 +63,7 @@ jobs:
           context: .
           push: true
           tags: |
-            eu.gcr.io/happn-infra/nodegraph-generator:latest
-            eu.gcr.io/happn-infra/nodegraph-generator:${{ github.sha }}
-            eu.gcr.io/happn-infra/nodegraph-generator:${{ github.ref_name }}
+            ghcr.io/happn-app/nodegraph-generator:latest
+            ghcr.io/happn-app/nodegraph-generator:${{ github.sha }}
+            ghcr.io/happn-app/nodegraph-generator:${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
