@@ -32,5 +32,5 @@ Manual testing can be done using `docker compose`, which will:
 For it to work, you need to port forward `vmauth` from the `monitoring` cluster
 
 ```sh
-kubectl --context monitoring port-forward --namespace victoriametrics services/vmclusterlb-vmcluster 8427
+kubectl --context monitoring port-forward --namespace victoriametrics services/vmauth-vmauth-lb 8427
 ```

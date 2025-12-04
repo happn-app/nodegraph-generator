@@ -45,10 +45,6 @@ func New(host string, ctx context.Context) (*vmClient, error) {
 			return nil, err
 		}
 	}
-	if hostUri.Path != "select/0/prometheus" {
-		log.Printf("No Prometheus path found in host URL, adding /select/0/prometheus")
-		hostUri = hostUri.ResolveReference(&url.URL{Path: "select/0/prometheus"})
-	}
 
 	client, err := api.NewClient(api.Config{
 		Address: hostUri.String(),
