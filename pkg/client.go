@@ -24,9 +24,11 @@ const (
 type vmClient struct {
 	ctx context.Context
 	api v1.API
+	queryRange time.Duration
+	queryStep  time.Duration
 }
 
-func New(host string, ctx context.Context) (*vmClient, error) {
+func New(host string, ctx context.Context, queryRange time.Duration, queryStep time.Duration) (*vmClient, error) {
 	if (!strings.HasPrefix(host, "http://")) && (!strings.HasPrefix(host, "https://")) {
 		host = "http://" + host
 	}
@@ -57,10 +59,14 @@ func New(host string, ctx context.Context) (*vmClient, error) {
 	return &vmClient{
 		ctx: ctx,
 		api: api,
+		queryRange: queryRange,
+		queryStep:  queryStep,
 	}, nil
 }
 
-func (client vmClient) QueryVectorLastInRange(expr string, rng time.Duration, step time.Duration) (model.Vector, error) {
+func (client vmClient) QueryVectorLastInRange(expr string) (model.Vector, error) {
+	step := client.queryStep
+	rng := client.queryRange
 	if step <= 0 {
 		// some reasonable default granularity
 		step = rng / 10
@@ -116,7 +122,7 @@ func (client vmClient) QueryVectorLastInRange(expr string, rng time.Duration, st
 func (client vmClient) QueryVector(expr string, instant bool) (model.Vector, error) {
 	log.Printf("[VMClient] QueryVector: expr=%q instant=%t", expr, instant)
 	if !instant {
-		return client.QueryVectorLastInRange(expr, 24*time.Hour, 1*time.Minute)
+		return client.QueryVectorLastInRange(expr)
 	}
 	val, _, err := client.api.Query(client.ctx, expr, time.Now())
 	if err != nil {

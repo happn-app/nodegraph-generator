@@ -6,11 +6,9 @@ import (
 	"log"
 	"maps"
 	"net/http"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type GraphResponse struct {
@@ -38,6 +36,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func GraphHandler(w http.ResponseWriter, r *http.Request) {
+	config := LoadConfig()
 	q := r.URL.Query()
 	env := q.Get("env")
 	if env == "" {
@@ -59,10 +58,10 @@ func GraphHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[graph] request env=%q service=%q maxDepth=%d", env, startService, maxDepth)
 
-	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), config.Timeout)
 	defer cancel()
 
-	client, err := New(os.Getenv("VM_HOST"), ctx)
+	client, err := New(config.PrometheusHost, ctx, config.queryRange, config.queryStep)
 	if err != nil {
 		log.Fatalf("Could not create Prometheus client: %s", err)
 		http.Error(w, "failed to create VM client", http.StatusInternalServerError)
