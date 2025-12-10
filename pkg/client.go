@@ -67,6 +67,7 @@ func New(host string, ctx context.Context, queryRange time.Duration, queryStep t
 func (client vmClient) QueryVectorLastInRange(expr string) (model.Vector, error) {
 	step := client.queryStep
 	rng := client.queryRange
+	log.Printf("[VMClient] QueryVectorLastInRange: using range=%s and step=%s", rng, step)
 	if step <= 0 {
 		// some reasonable default granularity
 		step = rng / 10

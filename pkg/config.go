@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"log"
 	"os"
 	"time"
 
@@ -8,11 +9,11 @@ import (
 )
 
 type Config struct {
-	Host string `yaml:"host"`
-	Timeout time.Duration `yaml:"timeout"`
-	PrometheusHost string `yaml:"prometheus_host"`
-	queryRange time.Duration `yaml:"query_range"`
-	queryStep time.Duration `yaml:"query_step"`
+	Host           string        `yaml:"host"`
+	Timeout        time.Duration `yaml:"timeout"`
+	PrometheusHost string        `yaml:"prometheus_host"`
+	QueryRange     time.Duration `yaml:"query_range"`
+	QueryStep      time.Duration `yaml:"query_step"`
 }
 
 func LoadConfig() Config {
@@ -20,7 +21,7 @@ func LoadConfig() Config {
 	if path == "" {
 		path = "/etc/nodegraph-generator/config.yaml"
 	}
-	configBytes, err := os.ReadFile(path);
+	configBytes, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
@@ -29,5 +30,7 @@ func LoadConfig() Config {
 	if err != nil {
 		panic(err)
 	}
+	log.Printf("[LoadConfig] Loaded config: %+v", config)
+	log.Printf("[LoadConfig] Config path: %s", path)
 	return config
 }

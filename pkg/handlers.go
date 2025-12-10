@@ -34,7 +34,6 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte("not found\n"))
 }
 
-
 func GraphHandler(w http.ResponseWriter, r *http.Request) {
 	config := LoadConfig()
 	q := r.URL.Query()
@@ -61,7 +60,8 @@ func GraphHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), config.Timeout)
 	defer cancel()
 
-	client, err := New(config.PrometheusHost, ctx, config.queryRange, config.queryStep)
+	log.Printf("[graph] Instantiating client with configuration host=%s queryRange=%s queryStep=%s", config.PrometheusHost, config.QueryRange, config.QueryStep)
+	client, err := New(config.PrometheusHost, ctx, config.QueryRange, config.QueryStep)
 	if err != nil {
 		log.Fatalf("Could not create Prometheus client: %s", err)
 		http.Error(w, "failed to create VM client", http.StatusInternalServerError)
@@ -80,7 +80,6 @@ func GraphHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to enrich graph", http.StatusInternalServerError)
 		return
 	}
-
 
 	if len(edges) == 0 {
 		resp := GraphResponse{Nodes: []*NodeResult{}, Edges: []*EdgeResult{}}

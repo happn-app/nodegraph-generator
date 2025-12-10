@@ -1,0 +1,5 @@
+host: :8080
+timeout: 30s
+prometheus_host: http://localhost:8427
+query_range: 24h
+query_step: 5m
