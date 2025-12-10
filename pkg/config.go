@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"go.yaml.in/yaml/v2"
+	"go.yaml.in/yaml/v3"
 )
 
 type Config struct {
