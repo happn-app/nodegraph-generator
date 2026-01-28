@@ -1,0 +1,14 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nodegraph-generator
+  annotations:
+    github.com/project-slug: happn-app/nodegraph-generator
+    backstage.io/techdocs-ref: dir:.
+    jira/project-key: OPSTSK
+    jira/component: nodegraph-generator
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ops
